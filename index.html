@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Core | حول شغفك إلى حركة</title>
+    <style>
+        :root {
+    --primary: #00f2fe;
+    --secondary: #4facfe;
+    --accent: #f093fb;
+    --bg-dark: #0a0b1e;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+
+body {
+    background-color: var(--bg-dark);
+    color: white;
+    overflow-x: hidden;
+    direction: rtl;
+}
+.glass {
+    background: var(--glass); backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+}
+
+.app-container { max-width: 1200px; margin: auto; padding: 20px; }
+
+/* Navbar */
+.main-nav { padding: 15px 30px; margin-bottom: 40px; }
+.nav-content { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); }
+.nav-links { display: flex; list-style: none; gap: 30px; margin: 0; }
+.nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; }
+.nav-links li.active a { color: var(--accent); }
+
+.add-user-btn {
+    background: var(--primary); color: white; border: none; padding: 10px 20px;
+    border-radius: 12px; cursor: pointer; font-weight: 700;
+}
+
+.hero {
+    height: 100vh; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+}
+
+.lottie-container {
+    position: absolute; width: 80%; height: 80%;
+    z-index: 1; opacity: 0.6; transition: transform 0.1s ease-out;
+}
+
+.hero-content {
+    position: relative; z-index: 2; text-align: center;
+}
+
+.glow-text {
+    font-size: 4rem; font-weight: 800; margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+}
+
+/* زر الـ CTA المتوهج */
+.cta-glow {
+    padding: 15px 40px; font-size: 1.2rem; background: transparent;
+    border: 2px solid var(--primary); color: white; border-radius: 50px;
+    cursor: pointer; transition: 0.4s; position: relative; overflow: hidden;
+}
+
+.cta-glow:hover {
+    background: var(--primary); color: var(--bg-dark);
+    box-shadow: 0 0 40px var(--primary);
+    transform: scale(1.05);
+}
+
+/* الإحصائيات المباشرة */
+.live-stats {
+    position: absolute; bottom: 50px; display: flex; gap: 100px;
+}
+
+.stat-item { text-align: center; }
+.count { font-size: 2.5rem; font-weight: bold; display: block; color: var(--accent); }
+.label { font-size: 0.9rem; opacity: 0.7; display: flex; align-items: center; gap: 8px; }
+.dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; animation: pulse 1.5s infinite; }
+
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+/* البطاقات الزجاجية */
+.content-section { padding: 80px 8%; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+.glass {
+    background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+    padding: 30px; transition: 0.3s; position: relative;
+}
+
+.glass:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
+
+.card-status { position: absolute; top: 20px; left: 20px; padding: 5px 15px; border-radius: 10px; font-size: 0.7rem; }
+.live { background: #ff4757; color: white; }
+.wait { background: #ffa502; color: white; }
+
+.timer { margin-top: 20px; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+    </style>
+</head>
+<body>
+<div class="app-container">
+        <nav class="main-nav glass">
+            <div class="nav-content">
+                <div class="logo"><i class="ph-fill ph-lightning"></i> the<span>cori</span></div>
+                <ul class="nav-links">
+                    <li class="active"><a href="Explore Activity.html">استكشف التحديات</a></li>
+                    <li><a href="The Challenge Hub.html">التحديات الجماعية    </a></li>
+                    <li><a href="The Live Profile.html">الملف الشخصي </a></li>
+                </ul>
+                <button class="add-user-btn" onclick="openModal()">
+                    <i class="ph-bold ph-plus"></i>  
+                </button>
+            </div>
+        </nav>
+
+    
+
+    <header class="hero" id="hero">
+        <div class="lottie-container" id="parallax-bg">
+            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_96bovdur.json" 
+                background="transparent" speed="1" loop autoplay></lottie-player>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="glow-text">حول شغفك إلى <span class="dynamic-word">حركة</span></h1>
+            <p>انضم إلى مجتمع المبدعين الذين لا يتوقفون عن النمو.</p><br>
+            <button class="cta-glow">ابدأ رحلتك الآن</button>
+        </div>
+
+        <div class="live-stats">
+            <div class="stat-item">
+                <span class="count" data-target="1542">0</span>
+                <span class="label">مستخدم نشط <span class="dot"></span></span>
+            </div>
+            <div class="stat-item">
+                <span class="count" data-target="890">0</span>
+                <span class="label">تحدي مكتمل <i class="fas fa-check-circle"></i></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="content-section">
+        <h2 class="section-title">يحدث الآن</h2>
+        <div class="cards-grid">
+            
+            <div class="active-card glass">
+                <div class="card-status live">مباشر</div>
+                <h3>ماراثون البرمجة الإبداعية</h3>
+                <p>بناء واجهات تفاعلية باستخدام الأنيميشن.</p>
+                <div class="users-avatars">
+                    <img src="https://i.pravatar.cc/30?u=1" alt="user">
+                    <img src="https://i.pravatar.cc/30?u=2" alt="user">
+                    <span>+24 يشاركون</span>
+                </div>
+            </div>
+
+            <div class="active-card glass upcoming">
+                <div class="card-status wait">قريباً</div>
+                <h3>ورشة الرسم الرقمي</h3>
+                <p>تعلم دمج الألوان والظلال باحترافية.</p>
+                <div class="timer" data-time="Dec 31, 2025 23:59:59">00:00:00</div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // 1. تأثير Parallax لخلفية Lottie مع حركة الماوس
+const hero = document.getElementById('hero');
+const bg = document.getElementById('parallax-bg');
+
+hero.addEventListener('mousemove', (e) => {
+    const x = (window.innerWidth - e.pageX * 2) / 100;
+    const y = (window.innerHeight - e.pageY * 2) / 100;
+    bg.style.transform = `translateX(${x}px) translateY(${y}px)`;
+});
+
+// 2. عداد الأرقام الحي (Animated Counter)
+const counters = document.querySelectorAll('.count');
+counters.forEach(counter => {
+    const updateCount = () => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const speed = 200; 
+        const inc = target / speed;
+
+        if (count < target) {
+            counter.innerText = Math.ceil(count + inc);
+            setTimeout(updateCount, 1);
+        } else {
+            counter.innerText = target;
+        }
+    };
+    updateCount();
+});
+
+// 3. عداد تنازلي للفعاليات القادمة
+function updateTimers() {
+    const timers = document.querySelectorAll('.timer');
+    timers.forEach(timer => {
+        const targetDate = new Date(timer.dataset.time).getTime();
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        timer.innerText = `${h}:${m}:${s}`;
+    });
+}
+setInterval(updateTimers, 1000);
+
+// 4. تأثير إضافي: تغيير لون الشعار عند التمرير لأسفل
+window.addEventListener('scroll', () => {
+    const nav = document.querySelector('.glass-nav');
+    if (window.scrollY > 50) {
+        nav.style.padding = '10px 8%';
+        nav.style.background = 'rgba(10, 11, 30, 0.9)';
+    } else {
+        nav.style.padding = '20px 8%';
+        nav.style.background = 'rgba(255, 255, 255, 0.05)';
+    }
+});
+    </script>
+</body>
+</html>

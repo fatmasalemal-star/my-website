@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Hub | لوحة التفاعل الحيوي</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+    --primary: #6366f1;
+    --accent: #00f2fe;
+    --success: #10b981;
+    --danger: #ef4444;
+    --bg: #030712;
+    --glass: rgba(255, 255, 255, 0.03);
+}
+
+body {
+    margin: 0; font-family: 'Cairo', sans-serif;
+    background: var(--bg); color: #fff; overflow-x: hidden;
+    background-image: radial-gradient(circle at top right, #1e1b4b, transparent);
+}
+
+.glass {
+    background: var(--glass); backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+}
+
+.app-container { max-width: 1200px; margin: auto; padding: 20px; }
+
+/* Navbar */
+.main-nav { padding: 15px 30px; margin-bottom: 40px; }
+.nav-content { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); }
+.nav-links { display: flex; list-style: none; gap: 30px; margin: 0; }
+.nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; }
+.nav-links li.active a { color: var(--accent); }
+
+.add-user-btn {
+    background: var(--primary); color: white; border: none; padding: 10px 20px;
+    border-radius: 12px; cursor: pointer; font-weight: 700;
+}
+
+/* User Bubbles */
+.users-grid { display: flex; gap: 20px; overflow-x: auto; padding: 10px 0; }
+.user-card {
+    min-width: 100px; text-align: center; cursor: pointer; transition: 0.3s;
+}
+.user-card img {
+    width: 80px; height: 80px; border-radius: 50%; border: 3px solid transparent;
+    padding: 3px; object-fit: cover; transition: 0.3s;
+}
+.user-card:hover img { border-color: var(--accent); transform: scale(1.1); }
+.user-card.active img { border-color: var(--accent); box-shadow: 0 0 20px var(--accent); }
+
+/* Stats Panel */
+.stats-panel { padding: 30px; margin-top: 30px; animation: slideIn 0.5s ease-out; }
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.user-main-info { display: flex; align-items: center; gap: 20px; }
+.user-main-info img { width: 100px; height: 100px; border-radius: 20px; object-fit: cover; }
+
+.stats-content { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.a-card { 
+    display: flex; align-items: center; gap: 15px; padding: 20px; 
+    border-radius: 15px; margin-bottom: 10px; background: rgba(255,255,255,0.02);
+}
+.a-card i { font-size: 1.5rem; }
+.success i { color: var(--success); }
+.failure i { color: var(--danger); }
+.events i { color: var(--accent); }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; place-items: center; z-index: 1000; }
+.modal-content { width: 500px; padding: 30px; }
+input { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 10px; }
+
+@keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+
+</style>
+
+
+</head>
+<body>
+
+    <div class="app-container">
+        <nav class="main-nav glass">
+            <div class="nav-content">
+                <div class="logo"><i class="ph-fill ph-lightning"></i> HUB<span>360</span></div>
+                <ul class="nav-links">
+                    <li class="active"><a href="index.html">الرئيسية</a></li>
+                    <li><a href="The Challenge Hub.html">استكشاف الفعاليات </a></li>
+                    <li><a href="The Challenge Hub.html">التحديات الجماعية</a></li>
+                </ul>
+                <button class="add-user-btn" onclick="openModal()">
+                    <i class="ph-bold ph-plus"></i> إضافة عضو
+                </button>
+            </div>
+        </nav>
+
+        <section class="users-section">
+            <div class="section-header">
+                <h2>أبطال التحدي 🏆</h2>
+            </div>
+            <div class="users-grid" id="usersGrid">
+                </div>
+        </section>
+
+        <section id="statsPanel" class="stats-panel glass" style="display: none;">
+            <div class="panel-header">
+                <div class="user-main-info">
+                    <img id="detailImg" src="" alt="">
+                    <div>
+                        <h1 id="detailName">اسم المستخدم</h1>
+                        <p id="detailRole">المجال</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="edit-btn" onclick="editUser()"><i class="ph ph-pencil-line"></i> تعديل</button>
+                    <button class="delete-btn" onclick="deleteUser()"><i class="ph ph-trash"></i> حذف</button>
+                </div>
+            </div>
+
+            <div class="stats-content">
+                <div class="chart-container glass">
+                    <h3>نسبة الإنجاز الأسبوعية</h3>
+                    <canvas id="userChart"></canvas>
+                </div>
+                
+                <div class="details-list glass">
+                    <h3>سجل النشاط الأسبوعي</h3>
+                    <div class="activity-cards">
+                        <div class="a-card success">
+                            <i class="ph ph-check-circle"></i>
+                            <span>النجاحات</span>
+                            <strong id="detailSuccess">0</strong>
+                        </div>
+                        <div class="a-card failure">
+                            <i class="ph ph-x-circle"></i>
+                            <span>الخسائر</span>
+                            <strong id="detailLoss">0</strong>
+                        </div>
+                        <div class="a-card events">
+                            <i class="ph ph-calendar-star"></i>
+                            <span>الفعاليات</span>
+                            <strong id="detailEvents">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="userModal" class="modal-overlay">
+        <div class="modal-content glass">
+            <h2 id="modalTitle">إضافة مستخدم جديد</h2>
+            <form id="userForm">
+                <input type="hidden" id="editIndex">
+                <div class="input-group">
+                    <input type="text" id="userName" placeholder="الاسم" required>
+                    <input type="text" id="userRole" placeholder="التخصص (مثال: مبرمج)" required>
+                </div>
+                <div class="input-group">
+                    <input type="url" id="userImg" placeholder="رابط صورة المستخدم">
+                </div>
+                <div class="input-group-stats">
+                    <input type="number" id="successCount" placeholder="النجاحات">
+                    <input type="number" id="lossCount" placeholder="الخسائر">
+                    <input type="number" id="eventsCount" placeholder="الفعاليات">
+                </div>
+                <div class="modal-btns">
+                    <button type="button" class="cancel-btn" onclick="closeModal()">إلغاء</button>
+                    <button type="submit" class="save-btn">حفظ البيانات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+let users = JSON.parse(localStorage.getItem('challenge_hub_users')) || [
+    { id: 1, name: "سارة علي", role: " قارئة كتب", img: "https://i.pravatar.cc/150?u=1", success: 12, loss: 2, events: 5 },
+    { id: 2, name: "سالم خالد", role: " قائد فريق", img: "https://i.pravatar.cc/150?u=2", success: 8, loss: 4, events: 3 }
+];
+
+let activeUserId = null;
+let chartInstance = null;
+
+function renderUsers() {
+    const grid = document.getElementById('usersGrid');
+    grid.innerHTML = '';
+    users.forEach(user => {
+        const div = document.createElement('div');
+        div.className = `user-card ${activeUserId === user.id ? 'active' : ''}`;
+        div.onclick = () => showStats(user.id);
+        div.innerHTML = `
+            <img src="${user.img || 'https://via.placeholder.com/80'}" alt="${user.name}">
+            <p>${user.name}</p>
+        `;
+        grid.appendChild(div);
+    });
+}
+
+function showStats(id) {
+    activeUserId = id;
+    const user = users.find(u => u.id === id);
+    document.getElementById('statsPanel').style.display = 'block';
+    
+    // تحديث النصوص
+    document.getElementById('detailName').innerText = user.name;
+    document.getElementById('detailRole').innerText = user.role;
+    document.getElementById('detailImg').src = user.img;
+    document.getElementById('detailSuccess').innerText = user.success;
+    document.getElementById('detailLoss').innerText = user.loss;
+    document.getElementById('detailEvents').innerText = user.events;
+
+    // تحديث الرسم البياني
+    const total = parseInt(user.success) + parseInt(user.loss);
+    const percentage = total === 0 ? 0 : Math.round((user.success / total) * 100);
+    updateChart(percentage);
+    renderUsers();
+}
+
+function updateChart(percent) {
+    const ctx = document.getElementById('userChart').getContext('2d');
+    if (chartInstance) chartInstance.destroy();
+    chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [percent, 100 - percent],
+                backgroundColor: ['#00f2fe', '#1e293b'],
+                borderWidth: 0
+            }]
+        },
+        options: { cutout: '80%', plugins: { legend: { display: false } } }
+    });
+}
+
+// إضافة وتعديل مستخدم
+document.getElementById('userForm').onsubmit = function(e) {
+    e.preventDefault();
+    const id = document.getElementById('editIndex').value;
+    const userData = {
+        id: id ? parseInt(id) : Date.now(),
+        name: document.getElementById('userName').value,
+        role: document.getElementById('userRole').value,
+        img: document.getElementById('userImg').value || `https://i.pravatar.cc/150?u=${Math.random()}`,
+        success: document.getElementById('successCount').value || 0,
+        loss: document.getElementById('lossCount').value || 0,
+        events: document.getElementById('eventsCount').value || 0
+    };
+
+    if (id) {
+        const index = users.findIndex(u => u.id == id);
+        users[index] = userData;
+    } else {
+        users.push(userData);
+    }
+
+    saveAndRefresh();
+    closeModal();
+};
+
+function deleteUser() {
+    if (confirm('هل أنت متأكد من حذف هذا العضو؟')) {
+        users = users.filter(u => u.id !== activeUserId);
+        document.getElementById('statsPanel').style.display = 'none';
+        saveAndRefresh();
+    }
+}
+
+function editUser() {
+    const user = users.find(u => u.id === activeUserId);
+    document.getElementById('editIndex').value = user.id;
+    document.getElementById('userName').value = user.name;
+    document.getElementById('userRole').value = user.role;
+    document.getElementById('userImg').value = user.img;
+    document.getElementById('successCount').value = user.success;
+    document.getElementById('lossCount').value = user.loss;
+    document.getElementById('eventsCount').value = user.events;
+    document.getElementById('modalTitle').innerText = "تعديل بيانات العضو";
+    openModal();
+}
+
+function saveAndRefresh() {
+    localStorage.setItem('challenge_hub_users', JSON.stringify(users));
+    renderUsers();
+}
+
+function openModal() { document.getElementById('userModal').style.display = 'grid'; }
+function closeModal() { document.getElementById('userModal').style.display = 'none'; document.getElementById('userForm').reset(); }
+
+renderUsers();
+
+
+
+    </script>
+</body>
+</html>

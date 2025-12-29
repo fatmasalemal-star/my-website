@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ساحة التحديات المارافونية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: radial-gradient(circle at top, #2d2d5a 0%, #1a1a2e 100%);
+            min-height: 100vh; 
+            color: white; 
+        }
+       /* القائمة الزجاجية */
+.glass {
+    background: var(--glass); backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+}
+
+.app-container { max-width: 1200px; margin: auto; padding: 20px; }
+
+/* Navbar */
+.main-nav { padding: 15px 30px; margin-bottom: 40px; }
+.nav-content { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); }
+.nav-links { display: flex; list-style: none; gap: 30px; margin: 0; }
+.nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; }
+.nav-links li.active a { color: var(--accent); }
+
+.add-user-btn {
+    background: var(--primary); color: white; border: none; padding: 10px 20px;
+    border-radius: 12px; cursor: pointer; font-weight: 700;
+}
+.hero {
+    height: 100vh; display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+}
+        .card-blur { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .card-blur:hover { 
+            transform: translateY(-10px); 
+            border-color: #00f5d4; 
+            box-shadow: 0 10px 30px rgba(0, 245, 212, 0.1);
+        }
+        .active-filter {
+            background-color: #00f5d4 !important;
+            color: #1a1a2e !important;
+            box-shadow: 0 0 15px rgba(0, 245, 212, 0.4);
+        }
+        .modal-animate { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="p-4 md:p-12">
+<div class="app-container">
+        <nav class="main-nav glass">
+            <div class="nav-content">
+                <div class="logo"><i class="ph-fill ph-lightning"></i>  Challenges<span>Collective</span></div>
+                <ul class="nav-links">
+                    <li class="active"><a href="index.html">الرئيسية</a></li>
+                    <li><a href="The Challenge Hub.html">التحديات الجماعية  </a></li>
+                    <li><a href="The Live Profile.html">الملف الشخصي </a></li>
+                </ul>
+                <button1 class="add-user-btn" onclick="openModal()">
+                    <i class="ph-bold ph-plus"></i> تسجيل 
+                </button1>
+            </div>
+        </nav>
+
+
+
+
+    <br>
+        <br>
+    <br>
+    <br>
+
+    <header class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-800 mb-8 tracking-tight">   استكشف الفعاليات 🚀       </h1>
+        
+        <div class="flex flex-wrap justify-center gap-3 mb-8" id="filterButtons">
+            <button onclick="filterChallenges('الكل', this)" class="active-filter px-8 py-2 rounded-full bg-white/5 border border-white/10 transition-all">الكل</button>
+            <button onclick="filterChallenges('رياضة', this)" class="px-8 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all">رياضة</button>
+            <button onclick="filterChallenges('فن', this)" class="px-8 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all">فن</button>
+            <button onclick="filterChallenges('قراءة', this)" class="px-8 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all">قراءة</button>
+        </div>
+
+        <div class="max-w-md mx-auto relative mb-12">
+            <input type="text" id="searchInput" oninput="searchChallenges()" placeholder="ابحث عن تحدي..." 
+                   class="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-12 focus:outline-none focus:border-[#00f5d4] transition-all">
+            <i data-lucide="search" class="absolute right-4 top-3.5 text-gray-400 w-5 h-5"></i>
+        </div>
+    </header>
+
+    <main id="challengesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        </main>
+
+    <button onclick="openModal()" class="fixed bottom-8 left-8 md:bottom-12 md:left-12 bg-[#00f5d4] text-[#1a1a2e] p-4 md:px-8 md:py-4 rounded-full font-bold shadow-2xl flex items-center gap-3 hover:scale-110 transition-all z-40">
+        <i data-lucide="plus-circle"></i>
+        <span class="hidden md:inline">إضافة تحدي جديد</span>
+    </button>
+
+    <div id="modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-[#1e1e38] p-8 rounded-3xl w-full max-w-md border border-white/10 modal-animate shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="modalTitle" class="text-2xl font-bold text-[#00f5d4]">تحدي جديد</h2>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white"><i data-lucide="x"></i></button>
+            </div>
+            
+            <input type="hidden" id="editIndex">
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">اسم التحدي</label>
+                    <input type="text" id="taskTitle" class="w-full p-3 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:border-[#00f5d4] text-white">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">الوصف</label>
+                    <textarea id="taskDesc" rows="3" class="w-full p-3 rounded-xl bg-black/20 border border-white/10 focus:outline-none focus:border-[#00f5d4] text-white"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">الفئة</label>
+                    <select id="taskCategory" class="w-full p-3 rounded-xl bg-black/20 border border-white/10 focus:outline-none text-white appearance-none">
+                        <option value="رياضة">رياضة 🏃‍♂️</option>
+                        <option value="فن">فن 🎨</option>
+                        <option value="قراءة">قراءة 📚</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button onclick="saveChallenge()" class="flex-1 bg-[#00f5d4] text-[#1a1a2e] py-3 rounded-xl font-bold hover:opacity-90">حفظ التحدي</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let challenges = JSON.parse(localStorage.getItem('challenges')) || [];
+        let currentFilter = 'الكل';
+
+        function renderChallenges(filterText = '') {
+            const grid = document.getElementById('challengesGrid');
+            grid.innerHTML = '';
+
+            const filtered = challenges.filter(item => {
+                const matchesFilter = currentFilter === 'الكل' || item.category === currentFilter;
+                const matchesSearch = item.title.toLowerCase().includes(filterText.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-20 text-gray-500">لا توجد تحديات حالياً..</div>`;
+            }
+
+            filtered.forEach((item, index) => {
+                const actualIndex = challenges.indexOf(item);
+                const card = `
+                    <div class="card-blur p-8 rounded-[2rem] relative flex flex-col items-center text-center group">
+                        <div class="absolute top-4 left-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                            <button onclick="editChallenge(${actualIndex})" class="p-2 bg-white/5 rounded-full hover:bg-blue-500/20 text-blue-400"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                            <button onclick="deleteChallenge(${actualIndex})" class="p-2 bg-white/5 rounded-full hover:bg-red-500/20 text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                        
+                        <div class="w-12 h-12 rounded-2xl ${getCategoryColor(item.category)} flex items-center justify-center mb-6 shadow-lg">
+                            <i data-lucide="${getCategoryIcon(item.category)}"></i>
+                        </div>
+                        
+                        <span class="text-[10px] uppercase tracking-widest font-bold mb-2 opacity-60">${item.category}</span>
+                        <h3 class="text-2xl font-bold mb-4">${item.title}</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-4">${item.desc}</p>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', card);
+            });
+            lucide.createIcons();
+        }
+
+        function getCategoryIcon(cat) {
+            if(cat === 'رياضة') return 'dumbbell';
+            if(cat === 'فن') return 'palette';
+            return 'book-open';
+        }
+
+        function getCategoryColor(cat) {
+            if(cat === 'رياضة') return 'bg-emerald-500/20 text-emerald-400';
+            if(cat === 'فن') return 'bg-amber-500/20 text-amber-400';
+            return 'bg-sky-500/20 text-sky-400';
+        }
+
+        function saveChallenge() {
+            const title = document.getElementById('taskTitle').value;
+            const desc = document.getElementById('taskDesc').value;
+            const category = document.getElementById('taskCategory').value;
+            const editIndex = document.getElementById('editIndex').value;
+
+            if(!title) return;
+
+            const data = { title, desc, category };
+
+            if (editIndex === "") challenges.push(data);
+            else challenges[editIndex] = data;
+
+            localStorage.setItem('challenges', JSON.stringify(challenges));
+            closeModal();
+            renderChallenges();
+        }
+
+        function deleteChallenge(index) {
+            if(confirm('هل تريد حذف هذا التحدي؟')) {
+                challenges.splice(index, 1);
+                localStorage.setItem('challenges', JSON.stringify(challenges));
+                renderChallenges();
+            }
+        }
+
+        function searchChallenges() {
+            const text = document.getElementById('searchInput').value;
+            renderChallenges(text);
+        }
+
+        function filterChallenges(cat, btn) {
+            currentFilter = cat;
+            document.querySelectorAll('#filterButtons button').forEach(b => b.classList.remove('active-filter'));
+            btn.classList.add('active-filter');
+            renderChallenges();
+        }
+
+        function editChallenge(index) {
+            const item = challenges[index];
+            document.getElementById('modalTitle').innerText = "تعديل التحدي";
+            document.getElementById('taskTitle').value = item.title;
+            document.getElementById('taskDesc').value = item.desc;
+            document.getElementById('taskCategory').value = item.category;
+            document.getElementById('editIndex').value = index;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function openModal() {
+            document.getElementById('modalTitle').innerText = "تحدي جديد";
+            document.getElementById('editIndex').value = "";
+            document.getElementById('taskTitle').value = "";
+            document.getElementById('taskDesc').value = "";
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+        // تهيئة الأيقونات والبيانات
+        window.onload = () => {
+            renderChallenges();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

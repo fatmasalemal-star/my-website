@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Challenge Hub | منصة التحديات الجماعية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary: #6366f1;
+    --accent: #10b981;
+    --bg: #0f172a;
+    --glass: rgba(255, 255, 255, 0.05);
+}
+
+body {
+    margin: 0; font-family: 'Cairo', sans-serif;
+    background: var(--bg); color: white; scroll-behavior: smooth;
+}
+
+.glass {
+    background: var(--glass); backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+}
+
+.app-container { max-width: 1200px; margin: auto; padding: 20px; }
+
+/* Navbar */
+.main-nav { padding: 15px 30px; margin-bottom: 40px; }
+.nav-content { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.5rem; font-weight: 900; color: var(--primary); }
+.nav-links { display: flex; list-style: none; gap: 30px; margin: 0; }
+.nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; }
+.nav-links li.active a { color: var(--accent); }
+
+.add-user-btn {
+    background: var(--primary); color: white; border: none; padding: 10px 20px;
+    border-radius: 12px; cursor: pointer; font-weight: 700;
+}
+/* Hero */
+.hero-section { text-align: center; padding: 60px 20px; }
+.hero-badge { background: var(--glass); padding: 8px 20px; border-radius: 50px; display: inline-block; margin-bottom: 20px; font-size: 0.8rem; border: 1px solid var(--primary); }
+
+/* Leaderboard Podium */
+.podium { display: flex; align-items: flex-end; justify-content: center; gap: 20px; margin: 40px 0; }
+.rank { display: flex; flex-direction: column; align-items: center; }
+.bar { width: 60px; background: var(--primary); border-radius: 10px 10px 0 0; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+.first .bar { height: 100px; background: #fbbf24; color: #78350f; }
+.second .bar { height: 70px; background: #cbd5e1; color: #1e293b; }
+.third .bar { height: 50px; background: #92400e; }
+.rank img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid white; margin-bottom: 10px; }
+
+/* Filter Tabs */
+.filter-tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+.tab { background: var(--glass); border: 1px solid #334155; color: white; padding: 10px 25px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+.tab.active, .tab:hover { background: var(--primary); border-color: var(--primary); }
+
+/* Cards */
+.activities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; max-width: 1200px; margin: auto; padding: 20px; }
+.card { background: var(--glass); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; cursor: pointer; }
+.card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.1); border-color: var(--primary); }
+.card h3 { color: var(--primary); margin-top: 0; }
+
+/* Modal */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; place-items: center; z-index: 2000; padding: 20px; }
+.modal-content { background: #1e293b; padding: 40px; border-radius: 30px; width: 100%; max-width: 700px; position: relative; animation: zoomIn 0.3s ease; }
+@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.close-btn { position: absolute; top: 20px; left: 20px; font-size: 2rem; cursor: pointer; }
+
+
+</style>
+
+
+
+</head>
+<body>
+ <div class="app-container">
+        <nav class="main-nav glass">
+            <div class="nav-content">
+                <div class="logo"><i class="ph-fill ph-lightning"></i> 🚀 Challenge<span>Hub</span></div>
+                <ul class="nav-links">
+                    <li class="active"><a href="index.html">الرئيسية</a></li>
+                    <li><a href="Explore Activity.html">استكشف الفعاليات   </a></li>
+                    <li><a href="The Live Profile.html">الملف الشخصي </a></li>
+                </ul>
+                <button class="add-user-btn" onclick="openModal()">
+                    <i class="ph-bold ph-plus"></i> تسجيل 
+                </button>
+            </div>
+        </nav>
+
+
+    <main class="main-content">
+        <header class="hero-section">
+            <div class="hero-badge">أهدافنا: تعزيز التعاون • تحسين المهارات • كسر الروتين</div>
+            <h1>دليل الأنشطة الجماعية التفاعلي</h1>
+            <p>اختر النشاط المناسب لفريقك وابدأ رحلة التحدي والنمو الجماعي.</p>
+        </header>
+
+        <section class="live-leaderboard">
+            <h3>🏆 متصدرو التحديات الحية</h3>
+            <div class="podium">
+                <div class="rank second">
+                    <img src="https://i.pravatar.cc/80?u=2" alt="team">
+                    <div class="bar">2</div>
+                    <p>فريق العمالقة</p>
+                </div>
+                <div class="rank first">
+                    <i class="ph-fill ph-crown"></i>
+                    <img src="https://i.pravatar.cc/80?u=1" alt="team">
+                    <div class="bar">1</div>
+                    <p>صناع المستقبل</p>
+                </div>
+                <div class="rank third">
+                    <img src="https://i.pravatar.cc/80?u=3" alt="team">
+                    <div class="bar">3</div>
+                    <p>رواد التغيير</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-section">
+            <div class="filter-tabs" id="filterTabs">
+                <button class="tab active" data-cat="all">الكل</button>
+                <button class="tab" data-cat="ice">كسر الجمود</button>
+                <button class="tab" data-cat="mind">ذهنية</button>
+                <button class="tab" data-cat="physical">بدنية</button>
+                <button class="tab" data-cat="virtual">افتراضية</button>
+            </div>
+        </section>
+
+        <section class="activities-grid" id="activitiesGrid">
+            </section>
+    </main>
+
+    <div id="activityModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modalData"></div>
+        </div>
+    </div>
+
+    <script>
+// قاعدة بيانات الأنشطة
+const activities = [
+    {
+        id: 1, cat: "ice", name: "من يملك هذا؟", goal: "كسر الحواجز وتعريف الفريق ببعضهم",
+        tools: "أغراض شخصية عشوائية", time: "20 دقيقة",
+        steps: "يضع كل شخص غرضاً في صندوق، ثم تحاول المجموعة تخمين صاحب الغرض.",
+        learning: "اكتشاف اهتمامات الزملاء غير المعروفة."
+    },
+    {
+        id: 2, cat: "mind", name: "البحث عن الكنز الرقمي", goal: "تعزيز مهارات البحث والحل الجماعي",
+        tools: "جهاز كمبيوتر / إنترنت", time: "45 دقيقة",
+        steps: "حل سلسلة من الألغاز الرقمية للوصول إلى رمز فك التشفير النهائي.",
+        learning: "أهمية توزيع الأدوار والذكاء الجمعي."
+    },
+    {
+        id: 3, cat: "virtual", name: "بناء قصة مشتركة", goal: "تحفيز الإبداع والتواصل الفعال",
+        tools: "منصة فيديو (Zoom/Teams)", time: "15 دقيقة",
+        steps: "كل مشارك يضيف جملة واحدة فقط لبناء قصة متكاملة ومترابطة.",
+        learning: "الاستماع الجيد والتكيف مع أفكار الآخرين."
+    }
+];
+
+// عرض الأنشطة
+function renderActivities(filter = 'all') {
+    const grid = document.getElementById('activitiesGrid');
+    grid.innerHTML = '';
+    
+    const filtered = filter === 'all' ? activities : activities.filter(a => a.cat === filter);
+    
+    filtered.forEach(act => {
+        grid.innerHTML += `
+            <div class="card" onclick="openModal(${act.id})">
+                <h3>${act.name}</h3>
+                <p>${act.goal}</p>
+                <div style="color:var(--accent); font-size:0.9rem;">⏱️ ${act.time}</div>
+            </div>
+        `;
+    });
+}
+
+// فتح تفاصيل النشاط
+function openModal(id) {
+    const act = activities.find(a => a.id === id);
+    const modal = document.getElementById('activityModal');
+    const content = document.getElementById('modalData');
+    
+    content.innerHTML = `
+        <h2 style="color:var(--primary)">${act.name}</h2>
+        <p><strong>🎯 الهدف:</strong> ${act.goal}</p>
+        <p><strong>🛠️ الأدوات:</strong> ${act.tools}</p>
+        <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:15px; margin:20px 0;">
+            <h3>📝 خطوات التنفيذ:</h3>
+            <p>${act.steps}</p>
+        </div>
+        <p><strong>💡 الدرس المستفاد:</strong> ${act.learning}</p>
+        <p><strong>⏱️ الوقت المقدر:</strong> ${act.time}</p>
+        <button onclick="closeModal()" style="background:var(--primary); color:white; border:none; padding:10px 25px; border-radius:10px; cursor:pointer; width:100%; margin-top:20px;">تم استيعاب النشاط ✅</button>
+    `;
+    modal.style.display = 'grid';
+}
+
+function closeModal() { document.getElementById('activityModal').style.display = 'none'; }
+
+// نظام الفلترة
+document.getElementById('filterTabs').addEventListener('click', (e) => {
+    if(e.target.classList.contains('tab')) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+        renderActivities(e.target.dataset.cat);
+    }
+});
+
+// التشغيل الأولي
+renderActivities();
+
+
+
+    </script>
+</body>
+</html>
